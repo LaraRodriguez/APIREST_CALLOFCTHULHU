@@ -3,15 +3,26 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 from personalsheet import personal_sheet
+from skills import skills
+from languages import languages
+from jobs import jobs
+from equipement import equipement
+from locations import locations
+from mentalillness import mental_illness
+from myths import myths
+from nacionality import nacionality
+from sanity import loss_of_sanity
+from spells import spells
+from weapons import weapons
 
 @app.route("/")
 def saludo():
-    return("Bienvenido, Guardian")
+    return("Welcome, Guardian")
 @app.route('/ping', methods=['GET'])
 def ping():
     return jsonify({'response': 'pong!'})
 
-#aqui comienzan las rutas para los datos
+#character's characteristics
 
 @app.route('/personalsheet')
 def getchar():
@@ -50,7 +61,7 @@ def editChar(character_name):
         })
     return jsonify({'message': 'Characteristic not found'})
 
-@app.route('/products/<string:character_name>', methods=['DELETE'])
+@app.route('/personalsheet/<string:character_name>', methods=['DELETE'])
 def deleteChar(character_name):
     for char in personal_sheet:
         if char['name'] == character_name.lower():
@@ -60,6 +71,56 @@ def deleteChar(character_name):
         return jsonify({
             'message': 'Characteristic gone',
             'personalsheet': personal_sheet
+        })
+
+#character skills
+@app.route('/skills')
+def getskill():
+    return jsonify({'skills': skills})
+
+@app.route('/skills/<string:character_name>')
+def getSkill(skill_name):
+    for skill in skills:
+        if skill['name'] == skill_name.lower():
+            skillFound = skill
+    print(type(skillFound))
+    if (len(skillFound) > 0):
+        return jsonify({'skills': skillFound})
+    return jsonify({'message': 'skill not found'})
+
+@app.route('/skills', methods=['POST'])
+def addSkill():
+    new_skill = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    skills.append(new_skill)
+    return jsonify({'mensaje': 'Skill succesfully added', 'skill': skills})
+
+@app.route('/skills/<string:skill_name>', methods=['PUT'])
+def editSkill(skill_name):
+    for skill in skills:
+        if skill['name'] == skill_name.lower():
+            skillFound = skill
+    if (len(skillFound) > 0):
+        skillFound[0]['name'] = request.json['name']
+        skillFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Skill modified succesfully',
+            'skill': skillFound[0]
+        })
+    return jsonify({'message': 'Skill not found'})
+
+@app.route('/skills/<string:skill_name>', methods=['DELETE'])
+def deleteSkill(skill_name):
+    for skill in skills:
+        if skill['name'] == skill_name.lower():
+            skillFound = skill
+    if (len(skillFound) > 0):
+        skills.remove(skillFound[0])
+        return jsonify({
+            'message': 'Skill gone',
+            'skills': skills
         })
 
 if __name__ == '__main__':
