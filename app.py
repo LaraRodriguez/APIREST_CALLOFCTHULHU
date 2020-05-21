@@ -424,6 +424,54 @@ def deleteSpell(spell_name):
         })
 
 #character's mental illnesses
+@app.route('/mentalillness')
+def getill():
+    return jsonify({'mental illnesses': mental_illness})
+
+@app.route('/mentalillness/<string:ill_name>')
+def getIll(ill_name):
+    for ill in mental_illness:
+        if ill['name'] == ill_name.lower():
+            illFound = ill
+    print(type(illFound))
+    if (len(illFound) > 0):
+        return jsonify({'mental illnesses': illFound})
+    return jsonify({'message': 'Mental illness not found'})
+
+@app.route('/mentalillness', methods=['POST'])
+def addIll():
+    new_ill = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    mental_illness.append(new_ill)
+    return jsonify({'message': 'Mental illness succesfully added', 'mental illness': mental_illness})
+
+@app.route('/mentalillness/<string:ill_name>', methods=['PUT'])
+def editIll(ill_name):
+    for ill in mental_illness:
+        if ill['name'] == ill_name.lower():
+            illFound = ill
+    if (len(illFound) > 0):
+        illFound[0]['name'] = request.json['name']
+        illFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Mental illness modified succesfully',
+            'ill': illFound[0]
+        })
+    return jsonify({'message': 'Mental illness not found'})
+
+@app.route('/mentalillness/<string:ill_name>', methods=['DELETE'])
+def deleteIll(ill_name):
+    for ill in mental_illness:
+        if ill['name'] == ill_name.lower():
+            illFound = char
+    if (len(illFound) > 0):
+        mental_illness.remove(charFound[0])
+        return jsonify({
+            'message': 'Mental illness gone',
+            'mental illness': mental_illness
+        })
 
 #myths
 
