@@ -465,17 +465,65 @@ def editIll(ill_name):
 def deleteIll(ill_name):
     for ill in mental_illness:
         if ill['name'] == ill_name.lower():
-            illFound = char
+            illFound = ill
     if (len(illFound) > 0):
-        mental_illness.remove(charFound[0])
+        mental_illness.remove(illFound[0])
         return jsonify({
             'message': 'Mental illness gone',
             'mental illness': mental_illness
         })
 
 #myths
+@app.route('/myths')
+def getMyth():
+    return jsonify({'myth': myths})
 
-#locations
+@app.route('/myths/<string:myth_name>')
+def getMyth(myth_name):
+    for myth in myths:
+        if myth['name'] == myth_name.lower():
+            mythFound = myth
+    print(type(mythFound))
+    if (len(mythFound) > 0):
+        return jsonify({'myths': mythFound})
+    return jsonify({'message': 'Myth not found'})
+
+@app.route('/myths', methods=['POST'])
+def addMyth():
+    new_myth = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    myths.append(new_myth)
+    return jsonify({'message': 'Myths succesfully added', 'myths': myths})
+
+@app.route('/myths/<string:myth_name>', methods=['PUT'])
+def editMyth(myth_name):
+    for myth in myths:
+        if myth['name'] == myth_name.lower():
+            mythFound = myth
+    if (len(mythFound) > 0):
+        mythFound[0]['name'] = request.json['name']
+        mythFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Myth modified succesfully',
+            'myth': mythFound[0]
+        })
+    return jsonify({'message': 'Myth not found'})
+
+@app.route('/myths/<string:myth_name>', methods=['DELETE'])
+def deleteMyth(myth_name):
+    for myth in myths:
+        if myth['name'] == myth_name.lower():
+            mythFound = myth
+    if (len(mythFound) > 0):
+        myths.remove(mythFound[0])
+        return jsonify({
+            'message': 'Myth gone',
+            'myth': myths
+        })
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
 
