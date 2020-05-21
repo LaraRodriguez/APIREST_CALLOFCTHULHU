@@ -7,7 +7,6 @@ from skills import skills
 from languages import languages
 from jobs import jobs
 from equipement import equipement
-from locations import locations
 from mentalillness import mental_illness
 from myths import myths
 from nacionality import nacionality
@@ -475,7 +474,7 @@ def deleteIll(ill_name):
 
 #myths
 @app.route('/myths')
-def getMyth():
+def getmyth():
     return jsonify({'myth': myths})
 
 @app.route('/myths/<string:myth_name>')
