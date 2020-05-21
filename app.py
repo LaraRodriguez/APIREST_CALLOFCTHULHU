@@ -174,6 +174,54 @@ def deleteLang(lang_name):
         })
 
 #character's nacionality
+@app.route('/nacionality')
+def getnac():
+    return jsonify({'nacionality': nacionality})
+
+@app.route('/nacionality/<string:nac_name>')
+def getNac(nac_name):
+    for nac in nacionality:
+        if nac['name'] == nac_name.lower():
+            nacFound = nac
+    print(type(nacFound))
+    if (len(nacFound) > 0):
+        return jsonify({'nacionality': nacFound})
+    return jsonify({'message': 'Nacionality not found'})
+
+@app.route('/nacionality', methods=['POST'])
+def addNac():
+    new_nac = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    nacionality.append(new_nac)
+    return jsonify({'mensaje': 'Nacionality succesfully added', 'nacionality': nacionality})
+
+@app.route('/nacionality/<string:nac_name>', methods=['PUT'])
+def editNac(nac_name):
+    for nac in nacionality:
+        if nac['name'] == nac_name.lower():
+            nacFound = nac
+    if (len(nacFound) > 0):
+        nacFound[0]['name'] = request.json['name']
+        nacFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Nacionality modified succesfully',
+            'nac': nacFound[0]
+        })
+    return jsonify({'message': 'Nacionality not found'})
+
+@app.route('/nacionality/<string:nac_name>', methods=['DELETE'])
+def deleteNac(nac_name):
+    for nac in nacionality:
+        if nac['name'] == nac_name.lower():
+            nacFound = nac
+    if (len(nacFound) > 0):
+        nacionality.remove(nacFound[0])
+        return jsonify({
+            'message': 'Nacionality gone',
+            'nacionality': nacionality
+        })
 
 #character's equipement
 
