@@ -224,8 +224,104 @@ def deleteNac(nac_name):
         })
 
 #character's equipement
+@app.route('/equipement')
+def getequip():
+    return jsonify({'equipement': equipement})
+
+@app.route('/equipement/<string:equip_name>')
+def getEquip(equip_name):
+    for equip in equipement:
+        if equip['name'] == equip_name.lower():
+            equipFound = equip
+    print(type(equipFound))
+    if (len(equipFound) > 0):
+        return jsonify({'Equipement': equipFound})
+    return jsonify({'message': 'Equipement not found'})
+
+@app.route('/equipement', methods=['POST'])
+def addEquip():
+    new_equip = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    equipement.append(new_equip)
+    return jsonify({'message': 'Equipement succesfully added', 'equipement': equipement})
+
+@app.route('/equipement/<string:equip_name>', methods=['PUT'])
+def editEquip(equip_name):
+    for equip in equipement:
+        if equip['name'] == equip_name.lower():
+            equipFound = equip
+    if (len(equipFound) > 0):
+        equipFound[0]['name'] = request.json['name']
+        equipFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Equipement modified succesfully',
+            'equip': equipFound[0]
+        })
+    return jsonify({'message': 'Equipement not found'})
+
+@app.route('/equipement/<string:equip_name>', methods=['DELETE'])
+def deleteEquip(equip_name):
+    for equip in equipement:
+        if equip['name'] == equip_name.lower():
+            equipFound = equip
+    if (len(equipFound) > 0):
+        equipement.remove(equipFound[0])
+        return jsonify({
+            'message': 'Equipement gone',
+            'equipement': equipement
+        })
 
 #character's weapons
+@app.route('/personalsheet')
+def getchar():
+    return jsonify({'personal sheet': personal_sheet})
+
+@app.route('/personalsheet/<string:character_name>')
+def getCharacter(character_name):
+    for char in personal_sheet:
+        if char['name'] == character_name.lower():
+            charFound = char
+    print(type(charFound))
+    if (len(charFound) > 0):
+        return jsonify({'characteristics': charFound})
+    return jsonify({'message': 'Characteristic not found'})
+
+@app.route('/personalsheet', methods=['POST'])
+def addChar():
+    new_char = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    personal_sheet.append(new_char)
+    return jsonify({'mensaje': 'Characteristc succesfully added', 'personalsheet': personal_sheet})
+
+@app.route('/personalsheet/<string:character_name>', methods=['PUT'])
+def editChar(character_name):
+    for char in personal_sheet:
+        if char['name'] == character_name.lower():
+            charFound = char
+    if (len(charFound) > 0):
+        charFound[0]['name'] = request.json['name']
+        charFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Characteristic modified succesfully',
+            'char': charFound[0]
+        })
+    return jsonify({'message': 'Characteristic not found'})
+
+@app.route('/personalsheet/<string:character_name>', methods=['DELETE'])
+def deleteChar(character_name):
+    for char in personal_sheet:
+        if char['name'] == character_name.lower():
+            charFound = char
+    if (len(charFound) > 0):
+        personal_sheet.remove(charFound[0])
+        return jsonify({
+            'message': 'Characteristic gone',
+            'personalsheet': personal_sheet
+        })
 
 #character's job
 
