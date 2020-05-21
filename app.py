@@ -374,6 +374,54 @@ def deleteJob(job_name):
         })
 
 #character's spells
+@app.route('/spells')
+def getspell():
+    return jsonify({'spell': spells})
+
+@app.route('/spells/<string:spell_name>')
+def getSpell(spell_name):
+    for spell in spells:
+        if spell['name'] == spell_name.lower():
+            spellFound = spell
+    print(type(spellFound))
+    if (len(spellFound) > 0):
+        return jsonify({'spell': spellFound})
+    return jsonify({'message': 'Spell not found'})
+
+@app.route('/spells', methods=['POST'])
+def addSpell():
+    new_spell = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    spells.append(new_spell)
+    return jsonify({'message': 'Spell succesfully added', 'spell': spells})
+
+@app.route('/spells/<string:spell_name>', methods=['PUT'])
+def editSpell(spell_name):
+    for spell in spells:
+        if spell['name'] == spell_name.lower():
+            spellFound = spell
+    if (len(spellFound) > 0):
+        spellFound[0]['name'] = request.json['name']
+        spellFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Spell modified succesfully',
+            'spell': spellFound[0]
+        })
+    return jsonify({'message': 'spell not found'})
+
+@app.route('/spells/<string:spell_name>', methods=['DELETE'])
+def deleteSpell(spell_name):
+    for spell in spells:
+        if spell['name'] == spell_name.lower():
+            spellFound = spell
+    if (len(spellFound) > 0):
+        spells.remove(spellFound[0])
+        return jsonify({
+            'message': 'Abracadabra, spell gone',
+            'spell': spells
+        })
 
 #character's mental illnesses
 
