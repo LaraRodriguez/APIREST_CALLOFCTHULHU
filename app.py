@@ -123,6 +123,71 @@ def deleteSkill(skill_name):
             'skills': skills
         })
 
+#character's languages
+@app.route('/languages')
+def getlanguage():
+    return jsonify({'languages': languages})
+
+@app.route('/languages/<string:lang_name>')
+def getLang(lang_name):
+    for lang in lang_name:
+        if lang['name'] == lang_name.lower():
+            langFound = lang
+    print(type(langFound))
+    if (len(langFound) > 0):
+        return jsonify({'characteristics': langFound})
+    return jsonify({'message': 'Language not found'})
+
+@app.route('/languages', methods=['POST'])
+def addLang():
+    new_lang = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    languages.append(new_lang)
+    return jsonify({'mensaje': 'Language succesfully added', 'languages': languages})
+
+@app.route('/languages/<string:lang_name>', methods=['PUT'])
+def editLang(lang_name):
+    for lang in languages:
+        if lang['name'] == lang_name.lower():
+            langFound = lang
+    if (len(langFound) > 0):
+        langFound[0]['name'] = request.json['name']
+        langFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Language modified succesfully',
+            'char': langFound[0]
+        })
+    return jsonify({'message': 'Language not found'})
+
+@app.route('/languages/<string:lang_name>', methods=['DELETE'])
+def deleteLang(lang_name):
+    for lang in languages:
+        if lang['name'] == lang_name.lower():
+            langFound = lang
+    if (len(langFound) > 0):
+        languages.remove(langFound[0])
+        return jsonify({
+            'message': 'Language gone',
+            'language': languages
+        })
+
+#character's nacionality
+
+#character's equipement
+
+#character's weapons
+
+#character's job
+
+#character's spells
+
+#character's mental illnesses
+
+#myths
+
+#locations
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
 
