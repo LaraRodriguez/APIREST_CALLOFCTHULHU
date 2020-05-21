@@ -274,56 +274,104 @@ def deleteEquip(equip_name):
         })
 
 #character's weapons
-@app.route('/personalsheet')
-def getchar():
-    return jsonify({'personal sheet': personal_sheet})
+@app.route('/weapons')
+def getwea():
+    return jsonify({'weapons': weapons})
 
-@app.route('/personalsheet/<string:character_name>')
-def getCharacter(character_name):
-    for char in personal_sheet:
-        if char['name'] == character_name.lower():
-            charFound = char
-    print(type(charFound))
-    if (len(charFound) > 0):
-        return jsonify({'characteristics': charFound})
-    return jsonify({'message': 'Characteristic not found'})
+@app.route('/weapons/<string:weapons_name>')
+def getWea(wea_name):
+    for wea in weapons:
+        if wea['name'] == wea_name.lower():
+            weaFound = wea
+    print(type(weaFound))
+    if (len(weaFound) > 0):
+        return jsonify({'weapons': weaFound})
+    return jsonify({'message': 'Weapon not found'})
 
-@app.route('/personalsheet', methods=['POST'])
-def addChar():
-    new_char = {
+@app.route('/weapon', methods=['POST'])
+def addWea():
+    new_wea = {
         'name': request.json['name'],
         'description': request.json['description']
     }
-    personal_sheet.append(new_char)
-    return jsonify({'mensaje': 'Characteristc succesfully added', 'personalsheet': personal_sheet})
+    weapons.append(new_wea)
+    return jsonify({'message': 'Weapon succesfully added', 'weapon': weapons})
 
-@app.route('/personalsheet/<string:character_name>', methods=['PUT'])
-def editChar(character_name):
-    for char in personal_sheet:
-        if char['name'] == character_name.lower():
-            charFound = char
-    if (len(charFound) > 0):
-        charFound[0]['name'] = request.json['name']
-        charFound[0]['description'] = request.json['description']
+@app.route('/weapons/<string:wea_name>', methods=['PUT'])
+def editWea(wea_name):
+    for wea in weapons:
+        if wea['name'] == wea_name.lower():
+            weaFound = wea
+    if (len(weaFound) > 0):
+        weaFound[0]['name'] = request.json['name']
+        weaFound[0]['description'] = request.json['description']
         return jsonify({
-            'message': 'Characteristic modified succesfully',
-            'char': charFound[0]
+            'message': 'Weapon modified succesfully',
+            'wea': weaFound[0]
         })
-    return jsonify({'message': 'Characteristic not found'})
+    return jsonify({'message': 'Weapon not found'})
 
-@app.route('/personalsheet/<string:character_name>', methods=['DELETE'])
-def deleteChar(character_name):
-    for char in personal_sheet:
-        if char['name'] == character_name.lower():
-            charFound = char
-    if (len(charFound) > 0):
-        personal_sheet.remove(charFound[0])
+@app.route('/weapons/<string:wea_name>', methods=['DELETE'])
+def deleteWea(wea_name):
+    for wea in weapons:
+        if wea['name'] == wea_name.lower():
+            weaFound = wea
+    if (len(weaFound) > 0):
+        weapons.remove(weaFound[0])
         return jsonify({
-            'message': 'Characteristic gone',
-            'personalsheet': personal_sheet
+            'message': 'Weapon gone',
+            'weapon': weapons
         })
 
 #character's job
+@app.route('/jobs')
+def getjob():
+    return jsonify({'job': jobs})
+
+@app.route('/jobs/<string:job_name>')
+def getJob(job_name):
+    for job in jobs:
+        if job['name'] == job_name.lower():
+            jobFound = job
+    print(type(jobFound))
+    if (len(jobFound) > 0):
+        return jsonify({'jobs': jobFound})
+    return jsonify({'message': 'Jobs not found'})
+
+@app.route('/jobs', methods=['POST'])
+def addJob():
+    new_job = {
+        'name': request.json['name'],
+        'description': request.json['description']
+    }
+    jobs.append(new_job)
+    return jsonify({'message': 'Job succesfully added', 'job': jobs})
+
+@app.route('/jobs/<string:job_name>', methods=['PUT'])
+def editJob(job_name):
+    for job in jobs:
+        if job['name'] == job_name.lower():
+            jobFound = job
+    if (len(jobFound) > 0):
+        jobFound[0]['name'] = request.json['name']
+        jobFound[0]['description'] = request.json['description']
+        return jsonify({
+            'message': 'Job modified succesfully',
+            'job': jobFound[0]
+        })
+    return jsonify({'message': 'Job not found'})
+
+@app.route('/jobs/<string:job_name>', methods=['DELETE'])
+def deleteJob(job_name):
+    for job in jobs:
+        if job['name'] == job_name.lower():
+            jobFound = job
+    if (len(jobFound) > 0):
+        jobs.remove(jobFound[0])
+        return jsonify({
+            'message': 'Job gone',
+            'job': jobs
+        })
 
 #character's spells
 
